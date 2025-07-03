@@ -13,15 +13,21 @@ export class Workshops {
     console.log(' I do Something');
   }
 
-  getWorkshops(page : number = 1) {
+  getWorkshops(page : number = 1, category: string = '') {
+    const params : {_page: number; category?: string} = {
+      _page: page
+    };
+
+    if(category!== '') {
+      params.category =category;
+    }
    return this.http.get<IWorkshop[]> (
     `https://workshops-server.onrender.com/workshops`,
     {
-      params: {
-        _page: page
-      }
+      params,
     }
-   )
+    
+   );
   }
 
 

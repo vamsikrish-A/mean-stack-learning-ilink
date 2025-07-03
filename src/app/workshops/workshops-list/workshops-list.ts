@@ -23,6 +23,7 @@ export class WorkshopsList implements OnInit{
   loading = true;
   page = 1;
   filterKey = '';
+  category: string = '';
   // worksshopService : Workshops
 
   // constructor( workshopService : Workshops) {
@@ -76,6 +77,7 @@ export class WorkshopsList implements OnInit{
         }
 
         this.getWorkShops();  // page has changed -> get fresh data
+        this.filterByCategory(this.category);
       }
 
     })
@@ -103,4 +105,14 @@ export class WorkshopsList implements OnInit{
     );
   }
 
+  filterByCategory(category: string) {
+    this.workshopService.getWorkshops(this.page, category).subscribe({
+        next: (workshops) => {
+            this.workshops = workshops;
+            // A better alternative: If you make `this.workshops` and `this.filterKey` as signals, you can compute `this.filteredWorkshops` automatically when either `this.workshops` changes or `this.filterKey` changes
+            this.filterWorkshops();
+        },
+    });
+
+  }
 }
