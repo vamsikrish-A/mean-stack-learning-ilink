@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Workshops } from '../workshops';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import IWorkshop, { IModes } from '../models/Iworkshop';
 import { LoadingSpinner } from '../../common/loading-spinner/loading-spinner';
 import { ErrorAlert } from '../../common/error-alert/error-alert';
@@ -12,7 +12,7 @@ import { faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icon
 
 @Component({
   selector: 'app-workshop-details',
-  imports: [ LoadingSpinner, ErrorAlert, DatePipe, LocationPipe, FontAwesomeModule],
+  imports: [ LoadingSpinner, ErrorAlert, DatePipe, LocationPipe, FontAwesomeModule, RouterOutlet,RouterLink, RouterLinkActive],
   templateUrl: './workshop-details.html',
   styleUrl: './workshop-details.scss'
 })
