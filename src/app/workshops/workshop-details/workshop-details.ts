@@ -6,10 +6,13 @@ import { LoadingSpinner } from '../../common/loading-spinner/loading-spinner';
 import { ErrorAlert } from '../../common/error-alert/error-alert';
 import { DatePipe } from '@angular/common';
 import { LocationPipe } from '../../common/location/location-pipe';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
+
 
 @Component({
   selector: 'app-workshop-details',
-  imports: [ LoadingSpinner, ErrorAlert, DatePipe, LocationPipe],
+  imports: [ LoadingSpinner, ErrorAlert, DatePipe, LocationPipe, FontAwesomeModule],
   templateUrl: './workshop-details.html',
   styleUrl: './workshop-details.scss'
 })
@@ -18,6 +21,11 @@ export class WorkshopDetails implements OnInit {
   error: Error | null = null;
   workshopId!: number;
   workshop!: IWorkshop;
+
+  icons = {
+    faCheckCircle,
+    faTimesCircle
+  };
 
   constructor(private workshopService: Workshops,
     private activatedRoute: ActivatedRoute
