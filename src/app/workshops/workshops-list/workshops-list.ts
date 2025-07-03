@@ -7,19 +7,22 @@ import { ErrorAlert } from '../../common/error-alert/error-alert';
 import { Item } from './item/item';
 import { Pagination } from "../../common/pagination/pagination";
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-workshops-list',
-  imports: [CommonModule, LoadingSpinner, ErrorAlert, Item, Pagination],
+  imports: [CommonModule, LoadingSpinner, ErrorAlert, Item, Pagination, FormsModule],
   templateUrl: './workshops-list.html',
   styleUrl: './workshops-list.scss'
 })
 export class WorkshopsList implements OnInit{
 
-  workshops! : IWorkshop[];
+  workshops! : IWorkshop[];  //all the 10 workshops for the page
+  filteredWorkshops!: IWorkshop[];  //only filetered workshops
   error: Error | null = null;
   loading = true;
   page = 1;
+  filterKey = '';
   // worksshopService : Workshops
 
   // constructor( workshopService : Workshops) {
@@ -46,6 +49,7 @@ export class WorkshopsList implements OnInit{
           console.log( w );
           this.workshops = w;
           this.loading = false;
+          this.filterWorkshops();
         },
         error: (err) => {
           console.log(err);
@@ -90,6 +94,12 @@ export class WorkshopsList implements OnInit{
               page: this.page,
           },
         }
+    );
+  }
+
+ filterWorkshops() {
+    this.filteredWorkshops = this.workshops.filter(
+      (w) => w.name.toLowerCase().includes(this.filterKey.toLowerCase())
     );
   }
 
