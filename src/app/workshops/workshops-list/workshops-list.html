@@ -1,0 +1,10 @@
+@if(loading) {  
+    <app-loading-spinner></app-loading-spinner>
+} @else if( !loading && error ) {
+    <app-error-alert></app-error-alert>
+} @else {
+    @for ( workshop of workshops; track workshop.id ) {
+        <div>{{ workshop.name }}</div>
+    }
+    <!-- <div *ngFor="let workshop of workshops">{{ workshop.name }}</div> -->
+}
