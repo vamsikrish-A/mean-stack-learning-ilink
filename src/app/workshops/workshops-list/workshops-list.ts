@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Workshops } from '../workshops';
 import IWorkshop from '../models/Iworkshop';
 import { CommonModule } from '@angular/common';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { LoadingSpinner } from '../../common/loading-spinner/loading-spinner';
 import { ErrorAlert } from '../../common/error-alert/error-alert';
+import { Item } from './item/item';
 
 @Component({
   selector: 'app-workshops-list',
-  imports: [ CommonModule, NgbAlert, LoadingSpinner, ErrorAlert],
+  imports: [ CommonModule, LoadingSpinner, ErrorAlert, Item],
   templateUrl: './workshops-list.html',
   styleUrl: './workshops-list.scss'
 })
