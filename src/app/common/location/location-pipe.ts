@@ -7,12 +7,15 @@ import { ILocation } from '../../workshops/models/Iworkshop';
 export class LocationPipe implements PipeTransform {
 
  transform(value: ILocation, format: 'short'|'long' = 'long'): string {
+  console.log( 'pipe called');
+    console.log( 'data = ', value );
     if(format === 'short') {
-      return `${value.address}`;
+      console.log('short');
+      return `${value.address}, ${value.city}`;
     } else {
-      return `${value.address}`
+      console.log('long');
+      return `${value.address}, ${value.city}, ${value.state}`
     }
-    return "";
   }
 
 }
