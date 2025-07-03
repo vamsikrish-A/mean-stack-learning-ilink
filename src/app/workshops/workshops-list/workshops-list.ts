@@ -2,21 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { Workshops } from '../workshops';
 import IWorkshop from '../models/Iworkshop';
 import { CommonModule } from '@angular/common';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { LoadingSpinner } from '../../common/loading-spinner/loading-spinner';
 import { ErrorAlert } from '../../common/error-alert/error-alert';
+import { Item } from './item/item';
+import { Pagination } from "../../common/pagination/pagination";
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-workshops-list',
-  imports: [ CommonModule, NgbAlert, LoadingSpinner, ErrorAlert],
+  imports: [CommonModule, LoadingSpinner, ErrorAlert, Item, Pagination, FormsModule],
   templateUrl: './workshops-list.html',
   styleUrl: './workshops-list.scss'
 })
 export class WorkshopsList implements OnInit{
 
-  workshops! : IWorkshop[];
+  workshops! : IWorkshop[];  //all the 10 workshops for the page
+  filteredWorkshops!: IWorkshop[];  //only filetered workshops
   error: Error | null = null;
-  loading: boolean = true;
+  loading = true;
+  page = 1;
+  filterKey = '';
+  category: string = '';
   // worksshopService : Workshops
 
   // constructor( workshopService : Workshops) {
@@ -26,18 +33,24 @@ export class WorkshopsList implements OnInit{
   // }
 
   //short synatx for data member creation and initialization by using access modifier
-  constructor(private workshopService : Workshops) {
+  constructor(private workshopService : Workshops,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {
     this.workshopService.doSomething();
   }
 
   //LifeCycle method: executed when the component shows up on the screen
-  ngOnInit() {
-    this.workshopService.getWorkshops().subscribe(
+  // ngOnInit() {
+  //   this.workshopService.getWorkshops().subscribe(
+  getWorkShops() {
+    this.workshopService.getWorkshops(this.page).subscribe(
       {
         next: ( w ) => {
           console.log( w );
           this.workshops = w;
           this.loading = false;
+          this.filterWorkshops();
         },
         error: (err) => {
           console.log(err);
@@ -47,4 +60,59 @@ export class WorkshopsList implements OnInit{
     )
   }
 
+  ngOnInit() {
+    this.loading = true;
+    //this.getWorkShops();
+    // this.activatedRoute.queryParamMap is an Observable that tracks changes to the query string -> thus whenever `page` in the query string changes, the next() method is called
+    this.activatedRoute.queryParamMap.subscribe({
+      next: (queryParams) => {
+        const queryStr = queryParams.get('page'); //read as a string
+
+        // when the page loads for the first time, there is no `page` query string parameter -> so we set page to 1. Later on there is some `page` value
+
+        if(queryStr === null) {
+          this.page = 1;
+        } else {
+          this.page = +queryStr; // convert `page` from string type to number
+        }
+
+        this.getWorkShops();  // page has changed -> get fresh data
+        this.filterByCategory(this.category);
+      }
+
+    })
+      
+  }
+
+  changePage(newPage: number) {
+       this.page = newPage
+
+    //this.getWorkShops();
+
+    this.router.navigate(
+        ['/workshops'],
+        {
+          queryParams: {
+              page: this.page,
+          },
+        }
+    );
+  }
+
+ filterWorkshops() {
+    this.filteredWorkshops = this.workshops.filter(
+      (w) => w.name.toLowerCase().includes(this.filterKey.toLowerCase())
+    );
+  }
+
+  filterByCategory(category: string) {
+    this.workshopService.getWorkshops(this.page, category).subscribe({
+        next: (workshops) => {
+            this.workshops = workshops;
+            // A better alternative: If you make `this.workshops` and `this.filterKey` as signals, you can compute `this.filteredWorkshops` automatically when either `this.workshops` changes or `this.filterKey` changes
+            this.filterWorkshops();
+        },
+    });
+
+  }
 }
