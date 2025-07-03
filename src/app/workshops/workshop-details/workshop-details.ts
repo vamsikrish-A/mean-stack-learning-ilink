@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Workshops } from '../workshops';
 import { ActivatedRoute } from '@angular/router';
-import IWorkshop from '../models/Iworkshop';
+import IWorkshop, { IModes } from '../models/Iworkshop';
 import { LoadingSpinner } from '../../common/loading-spinner/loading-spinner';
 import { ErrorAlert } from '../../common/error-alert/error-alert';
 import { DatePipe } from '@angular/common';
@@ -51,5 +51,11 @@ export class WorkshopDetails implements OnInit {
         }
       });
   }
+
+  getIconForMode(mode: keyof IModes) {
+    return this.workshop.modes[mode]
+        ? this.icons.faCheckCircle
+        : this.icons.faTimesCircle;
+}
 
 }
