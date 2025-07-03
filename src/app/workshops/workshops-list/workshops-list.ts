@@ -16,7 +16,8 @@ export class WorkshopsList implements OnInit{
 
   workshops! : IWorkshop[];
   error: Error | null = null;
-  loading: boolean = true;
+  loading = true;
+  page = 1;
   // worksshopService : Workshops
 
   // constructor( workshopService : Workshops) {
@@ -31,8 +32,10 @@ export class WorkshopsList implements OnInit{
   }
 
   //LifeCycle method: executed when the component shows up on the screen
-  ngOnInit() {
-    this.workshopService.getWorkshops().subscribe(
+  // ngOnInit() {
+  //   this.workshopService.getWorkshops().subscribe(
+  getWorkShops() {
+    this.workshopService.getWorkshops(this.page).subscribe(
       {
         next: ( w ) => {
           console.log( w );
@@ -45,6 +48,22 @@ export class WorkshopsList implements OnInit{
         }
       }
     )
+  }
+
+  ngOnInit() {
+    this.loading = true;
+    this.getWorkShops();
+      
+  }
+
+  changePage(by: number) {
+    if(this.page ==1 && by <0) {
+      return;
+    }
+
+    this.page = this.page + by;
+
+    this.getWorkShops();
   }
 
 }
