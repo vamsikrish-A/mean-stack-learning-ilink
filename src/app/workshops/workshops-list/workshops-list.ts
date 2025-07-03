@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { LoadingSpinner } from '../../common/loading-spinner/loading-spinner';
 import { ErrorAlert } from '../../common/error-alert/error-alert';
 import { Item } from './item/item';
+import { Pagination } from "../../common/pagination/pagination";
 
 @Component({
   selector: 'app-workshops-list',
-  imports: [ CommonModule, LoadingSpinner, ErrorAlert, Item],
+  imports: [CommonModule, LoadingSpinner, ErrorAlert, Item, Pagination],
   templateUrl: './workshops-list.html',
   styleUrl: './workshops-list.scss'
 })
@@ -56,12 +57,8 @@ export class WorkshopsList implements OnInit{
       
   }
 
-  changePage(by: number) {
-    if(this.page ==1 && by <0) {
-      return;
-    }
-
-    this.page = this.page + by;
+  changePage(newPage: number) {
+       this.page = newPage
 
     this.getWorkShops();
   }
