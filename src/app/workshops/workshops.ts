@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import IWorkshop from './models/Iworkshop';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Workshops {
+  private apiUrl = environment.apiUrl;
 
   constructor( private http: HttpClient) { }
 
@@ -22,7 +24,7 @@ export class Workshops {
       params.category =category;
     }
    return this.http.get<IWorkshop[]> (
-    `https://workshops-server.onrender.com/workshops`,
+    `${this.apiUrl}/workshops`,
     {
       params,
     }
@@ -31,7 +33,7 @@ export class Workshops {
   }
   getWorkshopsById(workshopId: number) {
     return this.http.get<IWorkshop>(
-      `https://workshops-server.onrender.com/workshops/${workshopId}`
+      `${this.apiUrl}/workshops/${workshopId}`
     )
   }
 

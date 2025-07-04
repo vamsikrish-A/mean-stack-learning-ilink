@@ -3,6 +3,7 @@ import { Sessions } from '../../sessions';
 import { ActivatedRoute } from '@angular/router';
 import ISession from '../../models/ISession';
 import { VotingWdget } from '../../../common/voting-wdget/voting-wdget';
+import { Toast as ToastService } from '../../../common/toast';
 
 @Component({
   selector: 'app-sessions-list',
@@ -18,7 +19,8 @@ export class SessionsList implements OnInit{
 
   constructor(
     private sessionService: Sessions,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private toastService: ToastService
   ) {}
   ngOnInit(): void {
 
@@ -39,9 +41,19 @@ export class SessionsList implements OnInit{
       next: (updateSession) => {
         console.log("upvote api call::{}", updateSession);
         session.upvoteCount = updateSession.upvoteCount;
+        this.toastService.add({
+          message: `Your vote for ${session.name} has been captured`,
+          duration: 5000,
+          className: 'bg-success text-light'
+        });
       },
       error: (error) => {
         this.error = error;
+        this.toastService.add({
+          message: `Your vote for ${session.name} could not be captured ${this.error?.message}, try again`,
+          duration: 5000,
+          className: 'bg-danger text-light'
+        });
       },
     });
   }
