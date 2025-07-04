@@ -24,14 +24,26 @@
                 <div>{{ workshop.location | location }}</div>
 
                  <!-- Add this -->
-               <div>
+                <div class="my-2">
                     <span class="me-4">
-                        <fa-icon [icon]="getIconForMode('inPerson')"></fa-icon>
-                            In person
+                        <fa-icon
+                            [icon]="
+                                workshop.modes.inPerson
+                                    ? icons.faCheckCircle
+                                    : icons.faTimesCircle
+                            "
+                        ></fa-icon>
+                        In person
                     </span>
                     <span>
-                        <fa-icon [icon]="getIconForMode('online')"></fa-icon>
-                         Online
+                        <fa-icon
+                            [icon]="
+                                workshop.modes.online
+                                    ? icons.faCheckCircle
+                                    : icons.faTimesCircle
+                            "
+                        ></fa-icon>
+                        Online
                     </span>
                 </div>
             </div>

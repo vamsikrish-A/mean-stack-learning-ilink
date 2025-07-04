@@ -31,7 +31,8 @@ export class WorkshopDetails implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.loading = true;
       this.activatedRoute.paramMap.subscribe({
         next: (params) => {
           const isStr = params.get('id');
