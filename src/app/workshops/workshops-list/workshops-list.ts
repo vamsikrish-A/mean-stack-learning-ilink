@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Workshops } from '../workshops';
 import IWorkshop from '../models/Iworkshop';
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,7 @@ import { Pagination } from "../../common/pagination/pagination";
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Toast as ToastService } from '../../common/toast';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-workshops-list',
@@ -37,7 +38,8 @@ export class WorkshopsList implements OnInit{
   constructor(private workshopService : Workshops,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private modalService: NgbModal
   ) {
     this.workshopService.doSomething();
   }
@@ -147,5 +149,18 @@ export class WorkshopsList implements OnInit{
       }
 
     })
+  }
+
+  open(content: TemplateRef<any>, workshop:IWorkshop) {
+    this.modalService
+    .open(content, { ariaLabelledBy: 'modal=basic-title'})
+    .result.then(
+      (result) => {
+        if (result === 'ok') {
+          this.deleteWorkShop(workshop);
+        }
+      }
+    );
+
   }
 }
