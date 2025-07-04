@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import IWorkshop from '../../models/Iworkshop';
 import { DatePipe } from '@angular/common';
@@ -21,6 +21,13 @@ export class Item {
 
   @Input() 
   workshop!: IWorkshop;
+
+  @Output()
+  delete = new EventEmitter();
+
+  onDeleteWorkshop() {
+    this.delete.emit();
+  }
 
   constructor(private datePipe: DatePipe) {
     console.log( this.datePipe.transform( "2025-07-02", "medium" ) );

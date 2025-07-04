@@ -8,6 +8,7 @@ import { Item } from './item/item';
 import { Pagination } from "../../common/pagination/pagination";
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Toast as ToastService } from '../../common/toast';
 
 @Component({
   selector: 'app-workshops-list',
@@ -35,7 +36,8 @@ export class WorkshopsList implements OnInit{
   //short synatx for data member creation and initialization by using access modifier
   constructor(private workshopService : Workshops,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {
     this.workshopService.doSomething();
   }
@@ -114,5 +116,36 @@ export class WorkshopsList implements OnInit{
         },
     });
 
+  }
+
+  deleteWorkShop(workshop: IWorkshop) {
+    console.log(workshop);
+
+    this.workshopService.deleteWorkshopById(workshop.id).subscribe({
+      next: (params) => {
+        console.log(`${workshop.name} gets deleted`);
+        this.toastService.add({
+          message: `Deleated workshop with Id =${workshop.id} `,
+          className:'bg-success text-light',
+          duration:3000,
+        });
+
+        //update the workshops
+        this.workshops = this.workshops.filter(w => {
+          w.id !== workshop.id
+        });
+
+        this.filterWorkshops();
+      },
+      error: (error) => {
+        this.error =error;
+         this.toastService.add({
+                message: `Could not delete workshop with id = ${workshop.id}`,
+                className: 'bg-danger text-light',
+                duration: 3000,
+            });
+      }
+
+    })
   }
 }
