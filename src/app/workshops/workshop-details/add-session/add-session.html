@@ -5,22 +5,27 @@
 
 <hr />
 
-<form id="add-session-form">
+<form id="add-session-form" (ngSubmit)="addSession(addSessionForm)" #addSessionForm="ngForm">
+     <div>value = {{ addSessionForm.value | json }}</div>
+    <div>dirty = {{ addSessionForm.dirty }}</div>
+    <div>touched = {{ addSessionForm.touched }}</div>
+    <div>valid = {{ addSessionForm.valid }}</div>
     <div class="mb-3">
         <label for="sequenceId" class="form-label">Sequence ID</label>
         <input type="text" 
         class="form-control" 
         id="sequenceId"
+        name="sequenceId"
         required 
         pattern="\d+"
         ngModel
         #sequenceId="ngModel"
         />
-        <div>{{ sequenceId.value }}</div>
+        <!-- <div>{{ sequenceId.value }}</div>
         <div>{{ sequenceId.valid }}</div>
         <div>{{ sequenceId.errors | json }}</div>
         <div>{{ sequenceId.dirty }}</div>
-        <div>{{ sequenceId.touched }}</div>
+        <div>{{ sequenceId.touched }}</div> -->
         @if (sequenceId.invalid && (sequenceId.touched || sequenceId.dirty) && sequenceId.errors) {
             <div class="error-message">
                 @if (sequenceId.errors['required']) {
@@ -39,6 +44,7 @@
         type="text" 
         class="form-control" 
         id="name"
+        name="name"
         required
         pattern="[A-Z][A-Za-z]+"
         ngModel
@@ -62,6 +68,7 @@
         type="text" 
         class="form-control" 
         id="speaker"
+        name="speaker"
         required
         pattern="[A-Z][A-Za-z ]+(,[A-Z ][A-Za-z ]+)*"
         ngModel
@@ -130,6 +137,7 @@
         <textarea 
         class="form-control" 
         id="abstract" 
+        name="abstract"
         rows="3"
         required
         minlength="20"
@@ -147,6 +155,6 @@
         }
     </div>
     <div class="mb-3">
-        <button class="btn btn-primary">Add session</button>
+        <button class="btn btn-primary" [disabled]="addSessionForm.invalid">Add session</button>
     </div>
 </form>
